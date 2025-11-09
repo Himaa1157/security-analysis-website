@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Analysis Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f7fafc;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: #2d3748;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .vulnerability-card {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .vulnerability-card.critical {
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .vulnerability-card.high {
+            border-left: 4px solid #dd6b20;
+        }
+        
+        .vulnerability-card.medium {
+            border-left: 4px solid #d69e2e;
+        }
+        
+        .risk-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .risk-critical { background: #fed7d7; color: #c53030; }
+        .risk-high { background: #feebc8; color: #dd6b20; }
+        .risk-medium { background: #fefcbf; color: #d69e2e; }
+        
+        .solution-box {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .recommendation {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">🔒 Security Analysis Dashboard</div>
+        <div class="user-info">
+            <span>Welcome, <span id="displayUser">User</span></span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Identifikasi & Analisis Keamanan Sistem Informasi</h1>
+            <p>Analisis komprehensif terhadap kerentanan keamanan pada sistem login sederhana</p>
+        </div>
+
+        <!-- Ringkasan Analisis -->
+        <div class="analysis-section">
+            <h2>📊 Ringkasan Analisis Keamanan</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div>Kerentanan Ditemukan</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2</div>
+                    <div>Kerentanan Kritis</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div>Risiko Keamanan</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analisis Detail -->
+        <div class="analysis-section">
+            <h2>🔍 Identifikasi Kerentanan</h2>
+            
+            <div class="vulnerability-card critical">
+                <span class="risk-level risk-critical">KRITIS</span>
+                <h3>1. Autentikasi Client-Side</h3>
+                <p><strong>Deskripsi:</strong> Proses validasi login dilakukan sepenuhnya di sisi client menggunakan JavaScript</p>
+                <p><strong>Dampak:</strong> Penyerang dapat memodifikasi kode JavaScript atau melewati validasi dengan mudah</p>
+                <p><strong>Lokasi:</strong> File index.html, fungsi login()</p>
+                <div class="solution-box">
+                    <strong>🛡️ Rekomendasi Perbaikan:</strong>
+                    <ul>
+                        <li>Pindahkan validasi ke server-side</li>
+                        <li>Gunakan framework backend yang aman</li>
+                        <li>Implementasi session management yang proper</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="vulnerability-card critical">
+                <span class="risk-level risk-critical">KRITIS</span>
+                <h3>2. Penyimpanan Password Plain Text</h3>
+                <p><strong>Deskripsi:</strong> Password disimpan dan dibandingkan dalam bentuk plain text</p>
+                <p><strong>Dampak:</strong> Jika database bocor, semua password dapat langsung dibaca</p>
+                <p><strong>Lokasi:</strong> File index.html, variabel validUsers</p>
+                <div class="solution-box">
+                    <strong>🛡️ Rekomendasi Perbaikan:</strong>
+                    <ul>
+                        <li>Gunakan hashing algorithm (bcrypt, Argon2)</li>
+                        <li>Tambahkan salt untuk setiap password</li>
+                        <li>Implementasi pepper key</li>
+                    </ul>
+                    <div class="code-block">
+// Contoh implementasi bcrypt<br>
+const bcrypt = require('bcrypt');<br>
+const saltRounds = 12;<br><br>
+// Hash password<br>
+const hashedPassword = await bcrypt.hash(password, saltRounds);<br><br>
+// Verify password<br>
+const match = await bcrypt.compare(inputPassword, hashedPassword);
+                    </div>
+                </div>
+            </div>
+
+            <div class="vulnerability-card high">
+                <span class="risk-level risk-high">TINGGI</span>
+                <h3>3. Session Management yang Tidak Aman</h3>
+                <p><strong>Deskripsi:</strong> Status login disimpan di localStorage yang rentan terhadap XSS</p>
+                <p><strong>Dampak:</strong> Penyerang dapat mencuri session token melalui XSS attacks</p>
+                <p><strong>Lokasi:</strong> localStorage.setItem('loggedIn', 'true')</p>
+                <div class="solution-box">
+                    <strong>🛡️ Rekomendasi Perbaikan:</strong>
+                    <ul>
+                        <li>Gunakan httpOnly cookies untuk session</li>
+                        <li>Implementasi CSRF protection</li>
+                        <li>Set proper session timeout</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="vulnerability-card medium">
+                <span class="risk-level risk-medium">SEDANG</span>
+                <h3>4. Tidak Ada Rate Limiting</h3>
+                <p><strong>Deskripsi:</strong> Tidak ada pembatasan percobaan login yang gagal</p>
+                <p><strong>Dampak:</strong> Memungkinkan brute force attacks</p>
+                <div class="solution-box">
+                    <strong>🛡️ Rekomendasi Perbaikan:</strong>
+                    <ul>
+                        <li>Implementasi rate limiting (max 5 percobaan per IP)</li>
+                        <li>Tambahkan CAPTCHA setelah beberapa percobaan gagal</li>
+                        <li>Lock account sementara setelah terlalu banyak percobaan</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="vulnerability-card medium">
+                <span class="risk-level risk-medium">SEDANG</span>
+                <h3>5. Tidak Menggunakan HTTPS</h3>
+                <p><strong>Deskripsi:</strong> Komunikasi antara client dan server tidak dienkripsi</p>
+                <p><strong>Dampak:</strong> Rentan terhadap man-in-the-middle attacks</p>
+                <div class="solution-box">
+                    <strong>🛡️ Rekomendasi Perbaikan:</strong>
+                    <ul>
+                        <li>Gunakan SSL/TLS certificate</li>
+                        <li>Implementasi HSTS header</li>
+                        <li>Redirect semua traffic ke HTTPS</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rekomendasi Keamanan -->
+        <div class="analysis-section">
+            <h2>🎯 Rekomendasi Implementasi Keamanan</h2>
+            
+            <div class="recommendation">
+                <h3>Arsitektur Keamanan yang Direkomendasikan</h3>
+                <ol>
+                    <li><strong>Backend Server:</strong> Gunakan Node.js/Express dengan middleware security</li>
+                    <li><strong>Autentikasi:</strong> Implementasi JWT dengan httpOnly cookies</li>
+                    <li><strong>Database:</strong> Gunakan PostgreSQL/MySQL dengan prepared statements</li>
+                    <li><strong>Password Hashing:</strong> bcrypt dengan cost factor 12+</li>
+                    <li><strong>Input Validation:</strong> Library seperti Joi atau Validator.js</li>
+                </ol>
+            </div>
+
+            <div class="code-block">
+// Contoh middleware keamanan di Express.js<br>
+const helmet = require('helmet');<br>
+const rateLimit = require('express-rate-limit');<br><br>
+app.use(helmet());<br>
+app.use(rateLimit({<br>
+  windowMs: 15 * 60 * 1000, // 15 menit<br>
+  max: 100 // maksimal 100 request per windowMs<br>
+}));
+            </div>
+        </div>
+
+        <!-- Kesimpulan -->
+        <div class="analysis-section">
+            <h2>📝 Kesimpulan Analisis</h2>
+            <p>Website ini sengaja dibuat dengan berbagai kerentanan keamanan untuk tujuan edukasi. Dalam environment produksi, implementasi seperti ini akan sangat berbahaya karena:</p>
+            <ul>
+                <li>Membuka peluang data breach dan pencurian kredensial</li>
+                <li>Rentan terhadap session hijacking</li>
+                <li>Dapat menyebabkan unauthorized access ke sistem</li>
+                <li>Melanggar compliance regulations (GDPR, PDPA, dll.)</li>
+            </ul>
+            <p><strong>Peringatan:</strong> Jangan pernah menggunakan kode seperti ini dalam sistem produksi. Selalu ikuti best practices keamanan dan lakukan security testing secara berkala.</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkAuth() {
+            const loggedIn = localStorage.getItem('loggedIn');
+            const username = localStorage.getItem('username');
+            
+            if (!loggedIn || loggedIn !== 'true') {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            document.getElementById('displayUser').textContent = username;
+        }
+
+        function logout() {
+            // Clear all stored data
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginTime');
+            
+            window.location.href = 'index.html';
+        }
+
+        // Check authentication on page load
+        checkAuth();
+    </script>
+</body>
+</html>
